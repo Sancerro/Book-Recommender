@@ -77,34 +77,21 @@ def main():
             print("Suggestions:")        
             for i, suggestion in enumerate(suggestions):
                 print(f"{i+1}. {suggestion}")
-            selected_suggestion = input("Choose a suggestion by typing its number or type 'back' to search again: ")
+            selected_suggestion = display_suggestions(suggestions)
             if selected_suggestion.isdigit() and int(selected_suggestion) > 0 and int(selected_suggestion) <= len(suggestions):
                 selected_suggestion = suggestions[int(selected_suggestion) - 1]
+            
                 if choice == "author":
-                    books = books_df[books_df['Book-Author'] == selected_suggestion]
-                    books = books.sort_values("Book-Rating", ascending=False)
-                    print(f"Books by {selected_suggestion}:")
-                    for i, book in enumerate(books['Book-Title']):
-                        print(f"{i+1}. {book} ({books.iloc[i]['Book-Rating']})")
-                    selected_book = input("Choose a book by typing its number or type 'back' to search again: ")
-                    if selected_book.isdigit() and int(selected_book) > 0 and int(selected_book) <= len(books):
-                        selected_book = books.iloc[int(selected_book) - 1]
-                        print(f"Title: {selected_book['Book-Title']}")
-                        print(f"Author: {selected_book['Book-Author']}")
-                        print(f"Year of Publication: {selected_book['Year-Of-Publication']}")
-                        print(f"Publisher: {selected_book['Publisher']}")
-                        print(f"Rating: {selected_book['Book-Rating']}")
-                    elif selected_book == "back":
-                        continue
+                    selected_book = display_books_by_author(selected_suggestion, books_df)
+                    if books_df[books_df['Book-Title'] == selected_book].empty:
+                        print("Sorry, the book you selected is not present in our database.")
                     else:
-                        print("Invalid input.")
+                        book = books_df[books_df['Book-Title'] == selected_book].iloc[0]
 
+                  
                 else:
-                    book = books_df[books_df['Book-Title'] == selected_suggestion].iloc[0]
-                    print(f"Title: {book['Book-Title']}")
-                    print(f"Author: {book['Book-Author']}")
-                    print(f"Year of Publication: {book['Year-Of-Publication']}")
-                    print(f"Publisher: {book['Publisher']}")
+                    selected_book = selected_suggestion
+                    display_book_details(selected_book, books_df)
             elif selected_suggestion == "back":
                 continue
             else:

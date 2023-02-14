@@ -56,21 +56,28 @@ def main():
     greeting()
     
     while True:
+        
         choice = ""
         while choice not in ["author","title","quit"]:
             choice = input("Choose whether you want to search by author or title by typing either\n")
+        
         if choice == "quit":
             break
+        
         prefix = ""
         while not prefix:
             prefix = input("Type the prefix you want to search\n")
+        
         if prefix == "quit":
             break
         suggestions = []
+        
         if choice == "author":
             suggestions = get_book_suggestions(books_df, prefix, "author")
+        
         else:
             suggestions = get_book_suggestions(books_df, prefix, "title")
+        
         if suggestions == []:
             print("No books found")
         else:
@@ -88,14 +95,16 @@ def main():
                     else:
                         book = books_df[books_df['Book-Title'] == selected_book].iloc[0]
 
-                  
                 else:
                     selected_book = selected_suggestion
                     display_book_details(selected_book, books_df)
+            
             elif selected_suggestion == "back":
                 continue
+            
             else:
                 print("Invalid input.")
+                
 
 if __name__ == "__main__":
     main()
